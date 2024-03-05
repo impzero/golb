@@ -6,16 +6,16 @@
 
 - [x] Round-Robin Load-Balancing
 - [x] Health-Check
-- [] Weighted Round-Robin Load-Balancing
-- [] Random Load-Balancing
-- [] Weighted Random Load-Balancing
-- [] Dynamic Weighted Round-Robin Load-Balancing
-- [] Least-Connection Load-Balancing
-- [] Peak Exponentially Weighted Load-Balancing
-- [] Keep-Alive Connection
-- [] Logging
-- [] Metrics
-- [] Circuit-Breaker
+- [ ] Weighted Round-Robin Load-Balancing
+- [ ] Random Load-Balancing
+- [ ] Weighted Random Load-Balancing
+- [ ] Dynamic Weighted Round-Robin Load-Balancing
+- [ ] Least-Connection Load-Balancing
+- [ ] Peak Exponentially Weighted Load-Balancing
+- [ ] Keep-Alive Connection
+- [ ] Logging
+- [ ] Metrics
+- [ ] Circuit-Breaker
 
 ## Run locally
 
