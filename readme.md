@@ -1,8 +1,8 @@
 <h1 align="center">⚖️ golb</h1>
 
-<h3 align="center">
+<h4 align="center">
 a simple Go Load-Balancer written from scratch
-</h3>
+</h4>
 
 #### Features
 
