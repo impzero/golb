@@ -1,6 +1,9 @@
-## golb
+<p align="center">
+<h1 align="center">⚖️ golb</h1>
 
 ### a simple Go Load-Balancer written from scratch
+
+</p>
 
 #### Features
 
