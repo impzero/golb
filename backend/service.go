@@ -23,7 +23,7 @@ func (b *Service) handle(w http.ResponseWriter, _ *http.Request) {
 }
 
 func (b *Service) health(w http.ResponseWriter, _ *http.Request) {
-	if b.Name == "be-8" {
+	if b.Name == "be-2" {
 		http.Error(w, "internal server error", http.StatusInternalServerError)
 		return
 	}

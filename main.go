@@ -8,7 +8,6 @@ import (
 	"net/url"
 	"time"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/impzero/golb/backend"
 )
 
@@ -24,15 +23,44 @@ type Service struct {
 	Healthy bool
 }
 
+type Balancer interface {
+	ChooseInstance(services []Service) Service
+}
+
+type RoundRobin struct {
+	current int
+}
+
+func (rb *RoundRobin) ChooseInstance(services []Service) Service {
+	if rb.current == len(services) {
+		rb.current = 0
+	}
+
+	service := services[rb.current]
+	rb.current++
+	if !service.Healthy {
+		return rb.ChooseInstance(services)
+	}
+	return service
+}
+
 type LoadBalancer struct {
-	Pool     []Service
-	Strategy Strategy
+	Strategy  Strategy
+	Algorithm Balancer
+	Pool      []Service
 }
 
 func NewLoadBalancer(strategy Strategy, pool []Service) *LoadBalancer {
+	var algorithm Balancer
+	switch strategy {
+	case StrategyRoundRobin:
+		algorithm = &RoundRobin{}
+	}
+
 	return &LoadBalancer{
-		Strategy: strategy,
-		Pool:     pool,
+		Strategy:  strategy,
+		Pool:      pool,
+		Algorithm: algorithm,
 	}
 }
 
@@ -50,8 +78,6 @@ func (lb *LoadBalancer) CheckHealth() {
 				lb.Pool[i].Healthy = resp.StatusCode == http.StatusOK
 			}()
 		}
-
-		spew.Dump(lb.HealthStatus())
 		time.Sleep(5 * time.Second)
 	}
 }
@@ -69,7 +95,8 @@ func (lb *LoadBalancer) HealthStatus() map[string]string {
 }
 
 func (lb *LoadBalancer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	targetURL, err := url.Parse("http://localhost:8080")
+	service := lb.Algorithm.ChooseInstance(lb.Pool)
+	targetURL, err := url.Parse(service.URL)
 	if err != nil {
 		http.Error(w, "Internal Server Error", http.StatusInternalServerError)
 		return
