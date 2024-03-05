@@ -17,6 +17,12 @@
 - [ ] Metrics
 - [ ] Circuit-Breaker
 
+### Why
+
+I found this cool website [codingchallenges.fyi/challenges/challenge-load-balancer/](https://codingchallenges.fyi/challenges/challenge-load-balancer/) and decided to give it a try.
+
+Also previously inspired by Sam's awesome load-balancing visualization blog article [here](https://samwho.dev/load-balancing/)
+
 ## Run locally
 
 ```bash
