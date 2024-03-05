@@ -4,6 +4,10 @@
 a simple Go Load-Balancer written from scratch
 </h4>
 
+### Round-Robin Demo
+![](https://github.com/impzero/golb/assets/35530157/3ecfd141-7ec8-4ae2-bffc-ab305503880b)
+
+
 #### Features
 
 - [x] Round-Robin Load-Balancing
