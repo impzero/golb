@@ -6,8 +6,10 @@ a simple Go Load-Balancer written from scratch
 
 ### Round-Robin Demo
 In the demo we spin up 10 instances, but we have the second instance `be-2` intentionally fail, thats why in the video after `be-1` we go to `be-3`
-![](https://github.com/impzero/golb/assets/35530157/3ecfd141-7ec8-4ae2-bffc-ab305503880b)
 
+<p align="center">
+<img width="800" src="https://github.com/impzero/golb/assets/35530157/3ecfd141-7ec8-4ae2-bffc-ab305503880b"/>
+</p>
 
 #### Features
 
