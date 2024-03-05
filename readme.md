@@ -50,3 +50,5 @@ git clone git@github.com:impzero/golb
 cd golb
 go run main.go
 ```
+
+[![Hits](https://hits.sh/github.com/impzero.svg?style=plastic&label=%F0%9F%AA%90&color=555)](https://hits.sh/github.com/impzero/)
