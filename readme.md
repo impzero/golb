@@ -28,6 +28,7 @@ In the demo we spin up 10 instances, but we have the second instance `be-2` inte
 - [ ] Logging
 - [ ] Metrics
 - [ ] Circuit-Breaker
+- [ ] Sricky Sessions
 
 ### Why
 
