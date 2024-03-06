@@ -16,3 +16,19 @@ func (rb *RoundRobin) ChooseInstance(services []Service) Service {
 	rb.current++
 	return service
 }
+
+type LeastConnections struct {
+}
+
+func (ls LeastConnections) ChooseInstance(services []Service) Service {
+	min := int(^uint(0) >> 1)
+	var serv Service
+	for _, s := range services {
+		if s.ActiveConnections < min {
+			min = s.ActiveConnections
+			serv = s
+		}
+
+	}
+	return serv
+}

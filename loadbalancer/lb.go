@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+	"sync"
 	"time"
 
 	"github.com/gofrs/uuid"
@@ -17,15 +18,17 @@ const (
 )
 
 type Service struct {
-	ID      uuid.UUID
-	URL     string
-	Healthy bool
+	ID                uuid.UUID
+	URL               string
+	ActiveConnections int
+	Healthy           bool
 }
 
 type LoadBalancer struct {
 	Algorithm         Balancer
 	Pool              []Service
 	ProxyRoundTripper http.RoundTripper
+	lock              sync.Mutex
 }
 
 func New(strategy Strategy, pool []Service) *LoadBalancer {
@@ -60,6 +63,26 @@ func (lb *LoadBalancer) CheckHealth() {
 	}
 }
 
+func (lb *LoadBalancer) AddConn(id uuid.UUID) {
+	lb.lock.Lock()
+	defer lb.lock.Unlock()
+	for _, s := range lb.Pool {
+		if s.ID == id {
+			s.ActiveConnections++
+		}
+	}
+}
+
+func (lb *LoadBalancer) ReleaseConn(id uuid.UUID) {
+	lb.lock.Lock()
+	defer lb.lock.Unlock()
+	for _, s := range lb.Pool {
+		if s.ID == id {
+			s.ActiveConnections--
+		}
+	}
+}
+
 func (lb *LoadBalancer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	var serv Service = lb.Algorithm.ChooseInstance(lb.Pool)
 	for !serv.Healthy {
@@ -74,5 +97,7 @@ func (lb *LoadBalancer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 
 	proxy := httputil.NewSingleHostReverseProxy(targetURL)
 	proxy.Transport = lb.ProxyRoundTripper
+	lb.AddConn(serv.ID)
 	proxy.ServeHTTP(w, r)
+	lb.ReleaseConn(serv.ID)
 }

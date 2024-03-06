@@ -3,11 +3,12 @@
 <h4 align="center">
 a simple Go Load-Balancer written from scratch
 
-  
 [![Hits](https://hits.sh/github.com/impzero.svg?style=plastic&label=%F0%9F%AA%90&color=555)](https://hits.sh/github.com/impzero/)
+
 </h4>
 
 ### Round-Robin Demo
+
 In the demo we spin up 10 instances, but we have the second instance `be-2` intentionally fail, thats why in the video after `be-1` we go to `be-3`
 
 <p align="center">
