@@ -59,18 +59,6 @@ func (lb *LoadBalancer) CheckHealth() {
 	}
 }
 
-func (lb *LoadBalancer) HealthStatus() map[string]string {
-	status := map[string]string{}
-	for _, serv := range lb.Pool {
-		if serv.Healthy {
-			status[serv.Name] = "healthy"
-		} else {
-			status[serv.Name] = "unhealthy"
-		}
-	}
-	return status
-}
-
 func (lb *LoadBalancer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	var serv Service = lb.Algorithm.ChooseInstance(lb.Pool)
 	for !serv.Healthy {
