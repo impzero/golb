@@ -5,31 +5,33 @@ import (
 	"math/rand"
 	"net/http"
 	"time"
+
+	"github.com/gofrs/uuid"
 )
 
 type Server struct {
+	ID      uuid.UUID
 	Address string
-	Name    string
 }
 
-func New(name string, addr string) Server {
-	return Server{
-		Name:    name,
-		Address: addr,
+func New(addr string) (Server, error) {
+	id, err := uuid.NewV4()
+	if err != nil {
+		return Server{}, err
 	}
+	return Server{
+		ID:      id,
+		Address: addr,
+	}, nil
 }
 
 func (b *Server) handle(w http.ResponseWriter, _ *http.Request) {
 	time.Sleep(time.Duration(rand.Intn(3)) * time.Second)
 	w.WriteHeader(http.StatusOK)
-	fmt.Fprintf(w, "Hello from %s", b.Name)
+	fmt.Fprintf(w, "Hello from %s", b.ID)
 }
 
 func (b *Server) health(w http.ResponseWriter, _ *http.Request) {
-	if b.Name == "be-2" {
-		http.Error(w, "internal server error", http.StatusInternalServerError)
-		return
-	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusOK)
 }

@@ -12,13 +12,17 @@ import (
 func main() {
 	pool := []loadbalancer.Service{}
 	for i := 0; i < 10; i++ {
-		bs := server.New(fmt.Sprintf("be-%d", i), fmt.Sprintf(":%d", 8001+i))
+		bs, err := server.New(fmt.Sprintf(":%d", 8001+i))
+		if err != nil {
+			panic(err)
+		}
+
 		go func() {
 			log.Fatal(bs.Serve())
 		}()
 
 		pool = append(pool, loadbalancer.Service{
-			Name:    bs.Name,
+			ID:      bs.ID,
 			URL:     bs.URL(false),
 			Healthy: true,
 		})

@@ -6,6 +6,8 @@ import (
 	"net/http/httputil"
 	"net/url"
 	"time"
+
+	"github.com/gofrs/uuid"
 )
 
 type Strategy string
@@ -15,10 +17,9 @@ const (
 )
 
 type Service struct {
-	Name              string
-	URL               string
-	ActiveConnections uint32
-	Healthy           bool
+	ID      uuid.UUID
+	URL     string
+	Healthy bool
 }
 
 type LoadBalancer struct {
