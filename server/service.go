@@ -1,28 +1,31 @@
-package backend
+package server
 
 import (
 	"fmt"
+	"math/rand"
 	"net/http"
+	"time"
 )
 
-type Service struct {
+type Server struct {
 	Address string
 	Name    string
 }
 
-func NewService(name string, addr string) Service {
-	return Service{
+func New(name string, addr string) Server {
+	return Server{
 		Name:    name,
 		Address: addr,
 	}
 }
 
-func (b *Service) handle(w http.ResponseWriter, _ *http.Request) {
+func (b *Server) handle(w http.ResponseWriter, _ *http.Request) {
+	time.Sleep(time.Duration(rand.Intn(3)) * time.Second)
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprintf(w, "Hello from %s", b.Name)
 }
 
-func (b *Service) health(w http.ResponseWriter, _ *http.Request) {
+func (b *Server) health(w http.ResponseWriter, _ *http.Request) {
 	if b.Name == "be-2" {
 		http.Error(w, "internal server error", http.StatusInternalServerError)
 		return
@@ -31,14 +34,14 @@ func (b *Service) health(w http.ResponseWriter, _ *http.Request) {
 	w.WriteHeader(http.StatusOK)
 }
 
-func (b *Service) URL(tls bool) string {
+func (b *Server) URL(tls bool) string {
 	if tls {
 		return fmt.Sprintf("https://%s", b.Address)
 	}
 	return fmt.Sprintf("http://%s", b.Address)
 }
 
-func (b *Service) Serve() error {
+func (b *Server) Serve() error {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", b.handle)
 	mux.HandleFunc("/health", b.health)
